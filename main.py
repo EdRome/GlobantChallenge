@@ -24,7 +24,7 @@ xml_pr = XML_Processing.XMLProcessor(it, './input_data')
 df1 = xml_pr.process()
 
 # Clean the Dataframe, removing stopword and lemmatizing.
-processor = Data_Processing.DataFrameProcessing(df1)
+processor = Data_Processing.DataFrameProcessing(df1, download_dir='/content/working')
 df1 = processor.clean_df()
 
 # Create the TF-IDF matrix

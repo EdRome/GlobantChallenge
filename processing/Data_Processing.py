@@ -5,27 +5,31 @@ from collections import Counter
 
 import nltk
 from nltk.stem import WordNetLemmatizer
-try:
-  from nltk.corpus import stopwords
-except:
-  nltk.download('stopwords')
 
 import numpy as np
 import pandas as pd
 
 class DataFrameProcessing:
 
-    def __init__(self, df):
+    def __init__(self, df, download_dir):
         self.__df = df
         self.__fixed_divisions = None
+        self.__download_dir = download_dir
         # Download and unzip wordnet
         try:
             nltk.data.find('wordnet.zip')
         except:
-            nltk.download('wordnet', download_dir='/kaggle/working/')
-            command = "unzip /kaggle/working/corpora/wordnet.zip -d /kaggle/working/corpora"
+            nltk.download('wordnet', download_dir=self.__download_dir)
+            command = "unzip " + self.__download_dir + "/corpora/wordnet.zip -d " + self.__download_dir + "/corpora"
             subprocess.run(command.split())
-            nltk.data.path.append('/kaggle/working/')        
+            nltk.data.path.append(self.__download_dir)
+
+        try:
+            nltk.data.find('stopwords.zip')
+        except:
+            nltk.download('stopwords', download_dir=self.__download_dir)
+            nltk.data.path.append(self.__download_dir)
+            from nltk.corpus import stopwords
 
         self.__lemmatizer = WordNetLemmatizer()
         self.__stop_words = set(stopwords.words("english"))
