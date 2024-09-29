@@ -4,8 +4,11 @@ import subprocess
 from collections import Counter
 
 import nltk
-from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+try:
+  from nltk.corpus import stopwords
+except:
+  nltk.download('stopwords')
 
 import numpy as np
 import pandas as pd
@@ -66,6 +69,9 @@ class DataFrameProcessing:
 
     def clean_df(self):
 
+        self.__df.dropna(subset=['AbstractNarration','AwardTitle','Division'], inplace=True)
+
+
         self.__df['AwardTitle_clean'] = self.__df.AwardTitle.apply(self.clean_text)
         self.__df['Division_clean'] = self.__df.Division.apply(self.clean_text)
         self.__df['AbstractNarration_clean'] = self.__df.AbstractNarration.apply(self.clean_text)
@@ -88,10 +94,10 @@ class DataFrameProcessing:
             "ratio <= 80"
         )
 
-    def fix_division_name(self):
+    def fix_division_name(self, df):
         return np.where(
-            self.__df.Division_clean.isin(self.__fixed_divisions.Division_clean),
-            self.__df.Division_clean,
+            df.Division_clean.isin(self.__fixed_divisions.Division_clean),
+            df.Division_clean,
             "OTHER"
         )
     

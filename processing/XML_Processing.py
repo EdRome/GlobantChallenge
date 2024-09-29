@@ -8,8 +8,9 @@ class XMLProcessor:
     The process method will read the input iterator each time is called, when the iterator is empty, it will print a message.
     """
     
-    def __init__(self, batches: iter):
+    def __init__(self, batches: iter, xml_dir: str):
         self.__batches = batches
+        self.__xml_dir = xml_dir
     
     def filter_xml_element(self, file_path):
         """
@@ -32,8 +33,7 @@ class XMLProcessor:
         The input list is full of names only. This function concat the 
         XML directory to the filename.
         """
-        xml_dir = '/kaggle/input/nsf-research-awards-abstracts'
-        return map(lambda file: os.path.join(xml_dir, file), lst)
+        return map(lambda file: os.path.join(self.__xml_dir, file), lst)
 
     def get_text_elements(self, xml):
         """
